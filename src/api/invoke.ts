@@ -1,5 +1,13 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-export const Invokers = {
-  scrapeDev: async (): Promise<String> => await invoke("scrape_dev")
+type AsyncScrape<T> = () => Promise<T>;
+
+interface InvokeAPI {
+  scrapeDev: AsyncScrape<string>;
+  scrapeMe: AsyncScrape<string>;
+}
+
+export const Invokers: InvokeAPI = {
+  scrapeDev: async () => await invoke("scrape_dev"),
+  scrapeMe: async () => await invoke("scrape_me")
 };
