@@ -21,7 +21,7 @@ const Domain: React.FC<DomainProps> = ({ data }): JSX.Element => {
 
   const { name, code } = data;
   return (
-    <div>
+    <div className="domain-box">
       <p>Name: {name}</p>
       <p>
         Status: <span style={codeTransform(code)}>{code}</span>

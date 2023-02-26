@@ -168,3 +168,49 @@ pub mod chop {
 // TODO
 // Implement cron module
 ///////////////////////////
+///
+pub mod schedule {
+
+    use chrono::Utc;
+    use cron::Schedule;
+    use std::{ops::Deref, str::FromStr};
+
+    pub struct CustomSchedule {
+        expression: Option<String>,
+        pub schedule: Box<Option<Schedule>>,
+    }
+
+    impl Deref for CustomSchedule {
+        type Target = Option<Schedule>;
+
+        fn deref(&self) -> &Self::Target {
+            &self.schedule
+        }
+    }
+
+    impl Default for CustomSchedule {
+        fn default() -> CustomSchedule {
+            CustomSchedule {
+                expression: None,
+                schedule: Box::new(None),
+            }
+        }
+    }
+    impl CustomSchedule {
+        fn get(self) -> Option<Schedule> {
+            *self.schedule
+        }
+        pub fn set_standard(&mut self) {
+            let exp = String::from("0 0 9,12,15,18 * * *");
+            self.expression = Some(exp.clone());
+            self.schedule = Box::new(Some(Schedule::from_str(&exp).unwrap()));
+        }
+
+        pub fn print_schedule(&self) {
+            let s = self.schedule.clone().unwrap();
+            for datetime in s.upcoming(Utc).take(10) {
+                println!("-> {}", datetime);
+            }
+        }
+    }
+}

@@ -14,12 +14,14 @@ const Controls = () => {
     <div>
       <div className="container">
         <button onClick={handleScrapeMe}>HEALTH CHECK</button>
-        {msg.length && (
+        {msg.length ? (
           <>
             {msg.map((d) => (
               <Domain data={d} />
             ))}
           </>
+        ) : (
+          <p>Activate health check to retrieve status report.</p>
         )}
       </div>
     </div>
