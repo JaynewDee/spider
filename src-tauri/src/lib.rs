@@ -4,6 +4,7 @@ pub mod requests {
     use reqwest::{Method, Request, Url};
     pub struct Client {
         client: Box<reqwest::ClientBuilder>,
+        targets: [String; 1],
     }
 
     impl Deref for Client {
@@ -24,20 +25,22 @@ pub mod requests {
         pub fn new() -> Client {
             let builder = reqwest::ClientBuilder::new();
             let client = Box::new(builder);
-            Client { client }
+            let targets = ["https://www.google.com".to_owned()];
+            Client { client, targets }
         }
 
-        fn construct_request(m: Method, url: Url) -> reqwest::Request {
-            Request::new(m, url)
+        fn _construct_request(kind: &str, url: Url) -> reqwest::Request {
+            match kind {
+                "get" => Request::new(Method::GET, url),
+                "post" => Request::new(Method::POST, url),
+                "put" => Request::new(Method::PUT, url),
+                "delete" => Request::new(Method::DELETE, url),
+                _ => Request::new(Method::GET, url),
+            }
         }
 
         async fn as_text(url: &str) -> String {
             reqwest::get(url).await.unwrap().text().await.unwrap()
-        }
-
-        pub async fn request_dev() -> Result<String, ()> {
-            let body = Self::as_text("http://dev.to").await;
-            Ok(body)
         }
 
         pub async fn request_google() -> Result<String, ()> {
