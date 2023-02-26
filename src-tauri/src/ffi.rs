@@ -5,7 +5,7 @@ pub mod invoke_api {
     pub async fn scrape_me() -> Result<String, ()> {
         let client = Client::new();
 
-        let res = Client::request_status(&client).await?;
+        let res = Client::request_domain_status(&client).await?;
 
         Ok(res)
     }

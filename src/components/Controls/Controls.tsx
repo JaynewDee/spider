@@ -1,24 +1,26 @@
 import { Invokers } from "../../api/invoke";
 import { useState } from "react";
+import Domain from "../Domains/Domain";
 const Controls = () => {
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState([]);
 
   const handleScrapeMe = async () => {
     const msg = await Invokers.scrapeMe();
-    setMsg(msg);
+    const parsed = JSON.parse(msg);
+    setMsg(parsed);
   };
-  const handleScrapeGoogle = async () => {
-    const msg = await Invokers.scrapeGoogle();
-    setMsg(msg);
-  };
+
   return (
     <div>
       <div className="container">
-        <button onClick={handleScrapeMe}>GET ME</button>
-        <button onClick={handleScrapeGoogle}>GET GOOGLE</button>
-        <button onClick={handleScrapeMe}>GET DEV</button>
-
-        <div>{msg}</div>
+        <button onClick={handleScrapeMe}>HEALTH CHECK</button>
+        {msg.length && (
+          <>
+            {msg.map((d) => (
+              <Domain data={d} />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

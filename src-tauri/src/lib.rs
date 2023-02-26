@@ -64,6 +64,7 @@ pub mod requests {
 
     #[derive(Deserialize, Serialize, Debug)]
     struct Status {
+        name: String,
         code: String,
     }
 
@@ -131,22 +132,22 @@ pub mod requests {
             Ok(body)
         }
 
-        pub async fn request_status(&self) -> Result<String, ()> {
+        pub async fn request_domain_status(&self) -> Result<String, ()> {
             let domains = Domains::default();
             let mut responses = vec![];
             for domain in domains {
-                let url = Url::parse(&domain.url)
-                    .expect("Request method should properly parse url from string ... ");
+                let url = Url::parse(&domain.url).unwrap();
                 let req = Self::construct_request("get", url);
-                let res = Self::exec_request(&self, req).await.unwrap();
+                let res = Self::exec_request(&self, req).await?;
                 let status = res.status();
                 let status_text = status.as_str();
                 responses.push(Status {
+                    name: domain.name,
                     code: status_text.to_string(),
                 })
             }
             let json = serde_json::to_string(&responses).unwrap();
-            Ok(String::from(json))
+            Ok(json)
         }
     }
 }
