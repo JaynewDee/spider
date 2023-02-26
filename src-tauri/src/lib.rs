@@ -126,8 +126,8 @@ pub mod requests {
         }
 
         pub async fn request_google() -> Result<String, ()> {
-            let body = Self::as_text("https://www.google.com").await;
-            super::chop::printall_r(&body);
+            let body = Self::as_text("https://news.ycombinator.com/").await;
+            super::chop::test_printall_r(&body);
             Ok(body)
         }
 
@@ -151,9 +151,11 @@ pub mod requests {
     }
 }
 
+// TODO
+// Implement scraper module
+//////////////////////////////
 pub mod chop {
-
-    pub fn printall_r(content_str: &str) {
+    pub fn test_printall_r(content_str: &str) {
         for ch in content_str.chars() {
             if ch == 'r' {
                 println!("{ch}");
@@ -161,3 +163,7 @@ pub mod chop {
         }
     }
 }
+
+// TODO
+// Implement cron module
+///////////////////////////

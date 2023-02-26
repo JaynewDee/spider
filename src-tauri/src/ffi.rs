@@ -4,8 +4,9 @@ pub mod invoke_api {
     #[tauri::command]
     pub async fn scrape_me() -> Result<String, ()> {
         let client = Client::new();
+
         let res = Client::request_status(&client).await?;
-        println!("{:?}", res);
+
         Ok(res)
     }
 
@@ -13,7 +14,6 @@ pub mod invoke_api {
     pub async fn scrape_google() -> Result<String, ()> {
         let res = Client::request_google().await?;
 
-        println!("{:?}", res);
         Ok(res)
     }
 }
