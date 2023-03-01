@@ -173,7 +173,46 @@ pub mod schedule {
 
     use chrono::Utc;
     use cron::Schedule;
+    use serde::Serialize;
     use std::{ops::Deref, str::FromStr};
+
+    #[derive(Debug, thiserror::Error)]
+    enum Error {
+        #[error(transparent)]
+        Io(#[from] std::io::Error),
+    }
+
+    // we must manually implement serde::Serialize
+    impl serde::Serialize for Error {
+        fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: serde::ser::Serializer,
+        {
+            serializer.serialize_str(self.to_string().as_ref())
+        }
+    }
+
+    #[derive(Debug, thiserror::Error)]
+    enum CustomErr {
+        #[error("Serialize Error")]
+        SerializeScheduleErr(#[from] serde_json::Error),
+        #[error("Cron Error")]
+        CronErr(#[from] std::io::Error),
+    }
+
+    impl serde::Serialize for CustomErr {
+        fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: serde::ser::Serializer,
+        {
+            serializer.serialize_str(self.to_string().as_ref())
+        }
+    }
+
+    #[derive(Serialize)]
+    struct ScheduleResponse {
+        times: Vec<String>,
+    }
 
     pub struct CustomSchedule {
         expression: Option<String>,
@@ -196,21 +235,46 @@ pub mod schedule {
             }
         }
     }
+
     impl CustomSchedule {
-        fn get(self) -> Option<Schedule> {
+        fn _get(self) -> Option<Schedule> {
             *self.schedule
         }
-        pub fn set_standard(&mut self) {
+
+        //
+
+        pub fn set_standard(&mut self) -> Result<(), serde_json::Error> {
             let exp = String::from("0 0 9,12,15,18 * * *");
             self.expression = Some(exp.clone());
+
             self.schedule = Box::new(Some(Schedule::from_str(&exp).unwrap()));
+
+            Ok(())
         }
 
-        pub fn print_schedule(&self) {
+        //
+
+        pub fn print(&self) -> Result<(), cron::error::Error> {
             let s = self.schedule.clone().unwrap();
+
             for datetime in s.upcoming(Utc).take(10) {
                 println!("-> {}", datetime);
             }
+
+            Ok(())
         }
+
+        //
+
+        pub fn send(&self) -> String {
+            let schedule = self.schedule.as_ref().clone().unwrap();
+            let mut times = vec![];
+            for dt in schedule.upcoming(Utc).take(8) {
+                times.push(dt.to_string());
+            }
+            serde_json::to_string(&times).unwrap()
+        }
+
+        //
     }
 }
