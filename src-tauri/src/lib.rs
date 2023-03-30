@@ -165,11 +165,16 @@ pub mod chop {
 
         let fragment = Html::parse_document(&body);
 
-        let stories = Selector::parse(r#".titleline"#).unwrap();
+        let anchors = Selector::parse(r#"a"#).unwrap();
 
-        for story in fragment.select(&stories) {
+        let mut involve_rust: Vec<String> = vec![];
+        for anchor in fragment.select(&anchors) {
+            println!("{:?}", story.value());
             let story_txt = story.text().collect::<Vec<_>>();
-            println!("{:?}", story_txt);
+            for txt_str in story_txt {
+                println!("{:?}", txt_str);
+            }
+            // println!("{:?}", story_txt);
         }
     }
 }
