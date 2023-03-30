@@ -4,11 +4,11 @@ type AsyncGet<T> = () => Promise<T>;
 
 interface InvokeAPI {
   getDomains: AsyncGet<string>;
-  getHackerSrcs: (numPages: number) => Promise<string[]>;
+  getHackerSrcs: (numPages: number, filter: string) => Promise<string[]>;
 }
 
 export const Invokers: InvokeAPI = {
   getDomains: async () => await invoke("get_domains"),
-  getHackerSrcs: async (numPages) =>
-    await invoke("get_hacker_srcs", { numPages })
+  getHackerSrcs: async (numPages, filter) =>
+    await invoke("get_hacker_srcs", { numPages, filter })
 };

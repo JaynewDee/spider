@@ -146,7 +146,10 @@ pub mod chop {
     use scraper::{Html, Selector};
     struct Target(String);
 
-    pub async fn hacker_news(num_pages: usize) -> Result<Vec<String>, tauri::InvokeError> {
+    pub async fn hacker_news(
+        num_pages: usize,
+        filter: &str,
+    ) -> Result<Vec<String>, tauri::InvokeError> {
         // Query param `p` controls current page, increment and iterate over pages
         let mut target_page = 1;
         let mut all_src_data: Vec<Vec<String>> = vec![];
@@ -173,7 +176,7 @@ pub mod chop {
                 if let Some(attrs) = anchor.first_child().unwrap().value().as_element() {
                     for item in attrs.attrs() {
                         let owned_str = item.1.to_string();
-                        if owned_str.contains("https") {
+                        if owned_str.contains(&filter) {
                             src_strings.push(owned_str)
                         }
                     }

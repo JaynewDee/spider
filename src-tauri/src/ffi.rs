@@ -28,9 +28,11 @@ pub mod invoke_api {
     }
 
     #[tauri::command]
-    pub async fn get_hacker_srcs(num_pages: usize) -> Result<Vec<String>, InvokeError> {
-        let srcs = hacker_news(num_pages).await;
-        println!("{:?}", srcs);
+    pub async fn get_hacker_srcs(
+        num_pages: usize,
+        filter: String,
+    ) -> Result<Vec<String>, InvokeError> {
+        let srcs = hacker_news(num_pages, &filter).await;
         return srcs;
     }
 }
