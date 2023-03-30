@@ -148,14 +148,15 @@ pub mod requests {
 //////////////////////////////
 pub mod chop {
     use scraper::{Html, Selector};
-    use select::{document::Document, predicate::Name};
-    struct Targets(String, String);
+    struct Target(String);
 
-    pub async fn rust_news() {
-        let targets = Targets("https://news.ycombinator.com".to_string(), String::new());
+    pub async fn hacker_news(numPages: usize) -> Result<Vec<String>, tauri::InvokeError> {
+        // Query param `p` controls current page, increment and iterate over pages
+        let target_page = 1;
+        let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
         let client = reqwest::Client::new();
         let body = client
-            .get(targets.0)
+            .get(target.0)
             .send()
             .await
             .unwrap()
@@ -165,16 +166,27 @@ pub mod chop {
 
         let fragment = Html::parse_document(&body);
 
-        let elements = Selector::parse(r#"a"#).unwrap();
+        let elements = Selector::parse(r#".titleline"#).unwrap();
 
-        let mut anchors: Vec<String> = vec![];
+        let mut src_strings: Vec<String> = vec![];
+
         for anchor in fragment.select(&elements) {
-            // println!("{:?}", anchor.value());
-            let story_txt = anchor.html();
-            if story_txt.contains("https") {
-                println!("{:?}", story_txt);
+            let attrs = anchor
+                .first_child()
+                .unwrap()
+                .value()
+                .as_element()
+                .unwrap()
+                .attrs();
+            for item in attrs {
+                let owned_str = item.1.to_string();
+                if owned_str.contains("https") {
+                    src_strings.push(owned_str)
+                }
             }
         }
+
+        Ok(src_strings)
     }
 }
 

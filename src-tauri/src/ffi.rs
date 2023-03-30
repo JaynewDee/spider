@@ -1,8 +1,8 @@
 pub mod invoke_api {
-    use spider::chop::rust_news;
+    use spider::chop::hacker_news;
     use spider::requests::Client;
     use spider::schedule::CustomSchedule;
-    use tauri::InvokeError;
+    use tauri::{Invoke, InvokeError};
 
     #[tauri::command]
     pub async fn get_domains() -> Result<String, ()> {
@@ -10,7 +10,6 @@ pub mod invoke_api {
 
         let res = Client::request_domain_status(&client).await?;
 
-        rust_news().await;
         Ok(res)
     }
 
@@ -26,5 +25,12 @@ pub mod invoke_api {
         // call function that scrapes all specified targets
 
         Ok(())
+    }
+
+    #[tauri::command]
+    pub async fn get_hacker_srcs(num_pages: usize) -> Result<Vec<String>, InvokeError> {
+        let srcs = hacker_news(num_pages).await;
+        println!("{:?}", srcs);
+        return srcs;
     }
 }
