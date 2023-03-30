@@ -2,7 +2,7 @@ pub mod invoke_api {
     use spider::chop::hacker_news;
     use spider::requests::Client;
     use spider::schedule::CustomSchedule;
-    use tauri::{Invoke, InvokeError};
+    use tauri::InvokeError;
 
     #[tauri::command]
     pub async fn get_domains() -> Result<String, ()> {

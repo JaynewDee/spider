@@ -119,10 +119,6 @@ pub mod requests {
             Ok(res)
         }
 
-        async fn as_text(url: &str) -> String {
-            reqwest::get(url).await.unwrap().text().await.unwrap()
-        }
-
         pub async fn request_domain_status(&self) -> Result<String, ()> {
             let domains = Domains::default();
             let mut responses = vec![];
@@ -150,43 +146,46 @@ pub mod chop {
     use scraper::{Html, Selector};
     struct Target(String);
 
-    pub async fn hacker_news(numPages: usize) -> Result<Vec<String>, tauri::InvokeError> {
+    pub async fn hacker_news(num_pages: usize) -> Result<Vec<String>, tauri::InvokeError> {
         // Query param `p` controls current page, increment and iterate over pages
-        let target_page = 1;
-        let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
-        let client = reqwest::Client::new();
-        let body = client
-            .get(target.0)
-            .send()
-            .await
-            .unwrap()
-            .text()
-            .await
-            .unwrap();
+        let mut target_page = 1;
+        let mut all_src_data: Vec<Vec<String>> = vec![];
 
-        let fragment = Html::parse_document(&body);
-
-        let elements = Selector::parse(r#".titleline"#).unwrap();
-
-        let mut src_strings: Vec<String> = vec![];
-
-        for anchor in fragment.select(&elements) {
-            let attrs = anchor
-                .first_child()
+        while target_page < num_pages {
+            let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
+            let client = reqwest::Client::new();
+            let body = client
+                .get(target.0)
+                .send()
+                .await
                 .unwrap()
-                .value()
-                .as_element()
-                .unwrap()
-                .attrs();
-            for item in attrs {
-                let owned_str = item.1.to_string();
-                if owned_str.contains("https") {
-                    src_strings.push(owned_str)
+                .text()
+                .await
+                .unwrap();
+
+            let fragment = Html::parse_document(&body);
+
+            let elements = Selector::parse(r#".titleline"#).unwrap();
+
+            let mut src_strings: Vec<String> = vec![];
+
+            for anchor in fragment.select(&elements) {
+                if let Some(attrs) = anchor.first_child().unwrap().value().as_element() {
+                    for item in attrs.attrs() {
+                        let owned_str = item.1.to_string();
+                        if owned_str.contains("https") {
+                            src_strings.push(owned_str)
+                        }
+                    }
+                } else {
+                    break;
                 }
             }
-        }
 
-        Ok(src_strings)
+            all_src_data.push(src_strings);
+            target_page += 1;
+        }
+        Ok(all_src_data.into_iter().flatten().collect())
     }
 }
 
