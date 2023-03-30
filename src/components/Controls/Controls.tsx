@@ -5,7 +5,7 @@ const Controls = () => {
   const [msg, setMsg] = useState([]);
 
   const handleScrapeMe = async () => {
-    const msg = await Invokers.scrapeMe();
+    const msg = await Invokers.getDomains();
     const parsed = JSON.parse(msg);
     setMsg(parsed);
   };

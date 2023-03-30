@@ -74,10 +74,8 @@ pub mod requests {
     struct StatusResponses(Vec<Status>);
 
     //
-
     pub struct Client {
         client: Box<reqwest::Client>,
-        targets: [String; 1],
     }
 
     //
@@ -100,8 +98,7 @@ pub mod requests {
         pub fn new() -> Client {
             let builder = reqwest::Client::new();
             let client = Box::new(builder);
-            let targets = ["https://www.google.com".to_owned()];
-            Client { client, targets }
+            Client { client }
         }
 
         fn construct_request(kind: &str, url: Url) -> reqwest::Request {
@@ -124,12 +121,6 @@ pub mod requests {
 
         async fn as_text(url: &str) -> String {
             reqwest::get(url).await.unwrap().text().await.unwrap()
-        }
-
-        pub async fn request_google() -> Result<String, ()> {
-            let body = Self::as_text("https://news.ycombinator.com/").await;
-            super::chop::test_printall_r(&body);
-            Ok(body)
         }
 
         pub async fn request_domain_status(&self) -> Result<String, ()> {
@@ -156,11 +147,29 @@ pub mod requests {
 // Implement scraper module
 //////////////////////////////
 pub mod chop {
-    pub fn test_printall_r(content_str: &str) {
-        for ch in content_str.chars() {
-            if ch == 'r' {
-                println!("{ch}");
-            }
+    use scraper::{Html, Selector};
+    use select::{document::Document, predicate::Name};
+    struct Targets(String, String);
+
+    pub async fn rust_news() {
+        let targets = Targets("https://news.ycombinator.com".to_string(), String::new());
+        let client = reqwest::Client::new();
+        let body = client
+            .get(targets.0)
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap();
+
+        let fragment = Html::parse_document(&body);
+
+        let stories = Selector::parse(r#".titleline"#).unwrap();
+
+        for story in fragment.select(&stories) {
+            let story_txt = story.text().collect::<Vec<_>>();
+            println!("{:?}", story_txt);
         }
     }
 }
@@ -182,7 +191,6 @@ pub mod schedule {
         Io(#[from] std::io::Error),
     }
 
-    // we must manually implement serde::Serialize
     impl serde::Serialize for Error {
         fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
         where

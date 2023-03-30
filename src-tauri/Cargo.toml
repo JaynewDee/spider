@@ -16,7 +16,9 @@ tauri-build = { version = "1.2", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2", features = ["http-all", "shell-open"] }
-reqwest = {version = "0.11.14", features = ["cookies"] }
+reqwest = {version = "0.11.16", features = ["cookies"] }
+scraper = "0.15.0"
+select = "0.6.0"
 cron = "0.12.0"
 chrono = "0.4.23"
 thiserror = "1.0.38"

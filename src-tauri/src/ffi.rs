@@ -1,4 +1,5 @@
 pub mod invoke_api {
+    use spider::chop::rust_news;
     use spider::requests::Client;
     use spider::schedule::CustomSchedule;
     use tauri::InvokeError;
@@ -9,13 +10,21 @@ pub mod invoke_api {
 
         let res = Client::request_domain_status(&client).await?;
 
+        rust_news().await;
         Ok(res)
     }
 
     #[tauri::command]
-    pub fn get_schedule() -> Result<String, InvokeError> {
+    pub async fn get_schedule() -> Result<String, InvokeError> {
         let mut schedule = CustomSchedule::default();
         schedule.set_standard().unwrap();
         Ok(schedule.send())
+    }
+
+    #[tauri::command]
+    pub fn scrape_all() -> Result<(), InvokeError> {
+        // call function that scrapes all specified targets
+
+        Ok(())
     }
 }
