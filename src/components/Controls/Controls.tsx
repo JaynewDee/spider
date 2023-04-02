@@ -5,6 +5,7 @@ const Controls = () => {
   const [msg, setMsg] = useState([]);
   const [srcs, setSrcs] = useState<string[]>([]);
   const [filterState, setFilterState] = useState("");
+
   const handleScrapeMe = async () => {
     const msg = await Invokers.getDomains();
     const parsed = JSON.parse(msg);
@@ -15,9 +16,11 @@ const Controls = () => {
     const res = await Invokers.getHackerSrcs(17, filterState || "https");
     setSrcs(res);
   };
+
   const handleFilterChange = (e: any) => {
     setFilterState(e.target.value);
   };
+
   return (
     <div>
       <div className="container">
@@ -31,20 +34,24 @@ const Controls = () => {
         ) : (
           <p>Activate health check to retrieve status report.</p>
         )}
-        <button onClick={handleGetHackers}>Crawl Hacker News</button>
-        <label>Filter:</label>
-        <input
-          value={filterState}
-          name="filter"
-          type="text"
-          onChange={handleFilterChange}
-        />
+        <div className="input-btn-pair">
+          <label>Filter:</label>
+          <input
+            value={filterState}
+            name="filter"
+            type="text"
+            onChange={handleFilterChange}
+          />
+          <button onClick={handleGetHackers}>Crawl Hacker News</button>
+        </div>
         {srcs.length ? (
-          <>
+          <div className="scraped-links-box">
             {srcs.map((src) => (
-              <p>{src}</p>
+              <iframe className="scraped-link" src={src}>
+                {src}
+              </iframe>
             ))}
-          </>
+          </div>
         ) : (
           <p>Go Crawling ...</p>
         )}

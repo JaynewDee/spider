@@ -188,6 +188,7 @@ pub mod chop {
             all_src_data.push(src_strings);
             target_page += 1;
         }
+
         Ok(all_src_data.into_iter().flatten().collect())
     }
 }
