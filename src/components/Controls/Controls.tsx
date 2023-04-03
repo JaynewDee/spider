@@ -13,7 +13,7 @@ const Controls = () => {
   };
 
   const handleGetHackers = async () => {
-    const res = await Invokers.getHackerSrcs(17, filterState || "https");
+    const res = await Invokers.getHackerSrcs(10, filterState || "https");
     setSrcs(res);
   };
 
