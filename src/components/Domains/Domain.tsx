@@ -12,7 +12,6 @@ interface DomainProps {
 
 const Domain: React.FC<DomainProps> = ({ data, options }): JSX.Element => {
   if (!data) return <div></div>;
-  console.log(data);
 
   const codeTransform = (code: string) => {
     const asNum = Number(code);
@@ -25,10 +24,11 @@ const Domain: React.FC<DomainProps> = ({ data, options }): JSX.Element => {
 
   const { name, domain, code } = data;
 
+  console.log(options);
   return (
     <div className="domain-box">
       <p>{name}</p>
-      {options.iframes === "on" ? (
+      {options.iframes ? (
         <iframe src={domain}>FQDN: {domain}</iframe>
       ) : (
         <p>FQDN: {domain}</p>

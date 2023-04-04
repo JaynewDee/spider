@@ -38,3 +38,19 @@
   border: 1px solid black;
   padding: 1rem;
 }
+
+.checkbox {
+  position: absolute;
+  appearance: none;
+  width: 2rem;
+  cursor: pointer;
+  z-index: 3;
+}
+.checkbox::after {
+  content: "OFF";
+  color: rgba(200, 0, 0, 0.9);
+}
+.checkbox:checked::after {
+  content: "ON";
+  color: rgba(0, 200, 0, 0.9);
+}

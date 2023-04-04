@@ -3,7 +3,7 @@ import { Invokers } from "../api/invoke";
 import Domain from "./Domains/Domain";
 
 export interface OptionsState {
-  iframes: "on" | "off";
+  iframes: boolean;
 }
 
 interface ResultsState {
@@ -13,7 +13,7 @@ interface ResultsState {
 
 const Monitor = () => {
   const [optionsState, setOptionsState] = useState<OptionsState>({
-    iframes: "off"
+    iframes: false
   });
 
   const [results, setResults] = useState<ResultsState>({
@@ -21,27 +21,31 @@ const Monitor = () => {
     data: []
   });
 
-  const handleScrapeMe = async () => {
-    setResults((prev) => ({ ...prev, loading: true }));
+  const handleStatusFetch = async () => {
+    setResults({ data: [], loading: true });
     const msg = await Invokers.getDomains();
     const parsed = JSON.parse(msg);
     setResults({ data: parsed, loading: false });
   };
 
   const updateOptionsState = (e: any) => {
-    const { name, value } = e.target;
-    console.log(value);
-
-    setOptionsState((prev) => ({ ...prev, [name]: value }));
+    const { name, checked } = e.target;
+    setOptionsState((prev) => ({ ...prev, iframes: checked }));
   };
+
   return (
     <div>
       <div className="monitor-options-container">
         <h4>Options</h4>
-        <label>INCLUDE IFRAMES:</label>
-        <input type="checkbox" onChange={updateOptionsState} name="iframes" />
+        <label>IFRAMES:</label>
+        <input
+          className="checkbox iframe-option"
+          type="checkbox"
+          onChange={updateOptionsState}
+          name="iframes"
+        />
       </div>
-      <button disabled={results.loading} onClick={handleScrapeMe}>
+      <button disabled={results.loading} onClick={handleStatusFetch}>
         CHECK
       </button>
       {results.data.length ? (
