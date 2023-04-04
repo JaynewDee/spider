@@ -7,7 +7,7 @@ extern crate reqwest;
 
 mod ffi;
 
-use ffi::invoke_api::{get_domains, get_hacker_srcs, get_schedule, scrape_all};
+use ffi::invoke_api::{get_domains, get_hacker_srcs, get_reddit_srcs, get_schedule, scrape_all};
 
 fn main() {
     tauri::Builder::default()
@@ -15,7 +15,8 @@ fn main() {
             get_domains,
             get_schedule,
             scrape_all,
-            get_hacker_srcs
+            get_hacker_srcs,
+            get_reddit_srcs
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

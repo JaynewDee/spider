@@ -153,12 +153,12 @@ pub mod chop {
         // Query param `p` controls current page, increment and iterate over pages
         let mut target_page = 1;
         let mut all_src_data: Vec<Vec<String>> = vec![];
+        let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
+        let client = reqwest::Client::new();
 
         while target_page < num_pages {
-            let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
-            let client = reqwest::Client::new();
             let body = client
-                .get(target.0)
+                .get(&target.0)
                 .send()
                 .await
                 .unwrap()
@@ -175,6 +175,7 @@ pub mod chop {
             for anchor in fragment.select(&elements) {
                 if let Some(attrs) = anchor.first_child().unwrap().value().as_element() {
                     for item in attrs.attrs() {
+                        println!("{:?}", item);
                         let owned_str = item.1.to_string();
                         if owned_str.contains(&filter) {
                             src_strings.push(owned_str)
@@ -189,6 +190,32 @@ pub mod chop {
             target_page += 1;
         }
 
+        Ok(all_src_data.into_iter().flatten().collect())
+    }
+
+    pub async fn reddit() -> Result<Vec<String>, tauri::InvokeError> {
+        let mut all_src_data: Vec<Vec<String>> = vec![];
+        let target = Target(format!("https://www.reddit.com/search/?q=programming"));
+        let client = reqwest::Client::new();
+
+        let body = client
+            .get(&target.0)
+            .send()
+            .await
+            .unwrap()
+            .text()
+            .await
+            .unwrap();
+
+        let fragment = Html::parse_document(&body);
+
+        let elements = Selector::parse("a").unwrap();
+
+        for el in fragment.select(&elements) {
+            println!("{:?}", el.value());
+        }
+
+        println!("{:?}", elements);
         Ok(all_src_data.into_iter().flatten().collect())
     }
 }

@@ -11,3 +11,20 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+button {
+  background: none;
+  font-family: monospace;
+  color: black;
+  cursor: pointer;
+}
+
+:disabled {
+  background-color: #0f0f0f;
+  color: whitesmoke;
+}

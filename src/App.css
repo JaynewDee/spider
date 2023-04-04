@@ -18,3 +18,7 @@
   flex-flow: column nowrap;
   width: 33%;
 }
+
+.nav-container {
+  margin-bottom: 3rem;
+}
