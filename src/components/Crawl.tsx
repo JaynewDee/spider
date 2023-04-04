@@ -26,7 +26,7 @@ const Crawl = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <div className="input-btn-pair">
         <label>Filter:</label>
         <input

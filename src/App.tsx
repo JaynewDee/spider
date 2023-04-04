@@ -20,7 +20,7 @@ const App: React.FC<any> = () => {
     <>
       <Header />
       <Nav displayState={displayState} setDisplayState={setDisplayState} />
-      {displaySwitch(displayState)}
+      <div className="main-display">{displaySwitch(displayState)}</div>
     </>
   );
 };
