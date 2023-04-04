@@ -11,10 +11,10 @@
   flex-flow: column nowrap;
   width: 90vw;
 }
+
 .scraped-link {
   margin: 1rem auto;
   width: 100%;
-  height: 100vh;
 }
 
 .input-btn-pair {
@@ -32,4 +32,9 @@
 .main-display {
   width: 66vw;
   margin: 1rem auto;
+}
+
+.monitor-options-container {
+  border: 1px solid black;
+  padding: 1rem;
 }

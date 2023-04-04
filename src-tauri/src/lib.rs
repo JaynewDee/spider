@@ -65,6 +65,7 @@ pub mod requests {
     #[derive(Deserialize, Serialize, Debug)]
     struct Status {
         name: String,
+        domain: String,
         code: String,
     }
 
@@ -130,6 +131,7 @@ pub mod requests {
                 let status_text = status.as_str();
                 responses.push(Status {
                     name: domain.name,
+                    domain: domain.url,
                     code: status_text.to_string(),
                 })
             }
@@ -194,7 +196,7 @@ pub mod chop {
     }
 
     pub async fn reddit() -> Result<Vec<String>, tauri::InvokeError> {
-        let mut all_src_data: Vec<Vec<String>> = vec![];
+        let all_src_data: Vec<Vec<String>> = vec![];
         let target = Target(format!("https://www.reddit.com/search/?q=programming"));
         let client = reqwest::Client::new();
 

@@ -24,6 +24,11 @@ button {
   cursor: pointer;
 }
 
+iframe {
+  width: 66vw;
+  min-height: 66vh;
+}
+
 :disabled {
   background-color: #0f0f0f;
   color: whitesmoke;

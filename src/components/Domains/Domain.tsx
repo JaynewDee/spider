@@ -1,14 +1,18 @@
 import React from "react";
+import { OptionsState } from "../Monitor";
 
 interface DomainProps {
   data: {
     name: string;
+    domain: string;
     code: string;
   };
+  options: OptionsState;
 }
 
-const Domain: React.FC<DomainProps> = ({ data }): JSX.Element => {
+const Domain: React.FC<DomainProps> = ({ data, options }): JSX.Element => {
   if (!data) return <div></div>;
+  console.log(data);
 
   const codeTransform = (code: string) => {
     const asNum = Number(code);
@@ -19,11 +23,16 @@ const Domain: React.FC<DomainProps> = ({ data }): JSX.Element => {
       : { color: "red" };
   };
 
-  const { name, code } = data;
+  const { name, domain, code } = data;
 
   return (
     <div className="domain-box">
-      <p>Name: {name}</p>
+      <p>{name}</p>
+      {options.iframes === "on" ? (
+        <iframe src={domain}>FQDN: {domain}</iframe>
+      ) : (
+        <p>FQDN: {domain}</p>
+      )}
       <p>
         Status: <span style={codeTransform(code)}>{code}</span>
       </p>
