@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import Header from "./components/Header/Header";
-import Monitor from "./components/Monitor";
-import Crawl from "./components/Crawl";
+import Monitor from "./components/Monitor/Monitor";
+import Crawl from "./components/Crawl/Crawl";
 import Nav from "./components/Nav/Nav";
 
 const App: React.FC<any> = () => {

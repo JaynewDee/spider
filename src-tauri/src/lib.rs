@@ -1,4 +1,4 @@
-pub mod requests {
+pub mod monitor {
     use std::ops::{Deref, DerefMut};
 
     use reqwest::{Method, Request, Url};
@@ -74,12 +74,9 @@ pub mod requests {
     #[derive(Deserialize, Serialize, Debug)]
     struct StatusResponses(Vec<Status>);
 
-    //
     pub struct Client {
         client: Box<reqwest::Client>,
     }
-
-    //
 
     impl Deref for Client {
         type Target = Box<reqwest::Client>;
@@ -102,7 +99,7 @@ pub mod requests {
             Client { client }
         }
 
-        fn construct_request(kind: &str, url: Url) -> reqwest::Request {
+        fn construct(kind: &str, url: Url) -> reqwest::Request {
             match kind {
                 "get" => Request::new(Method::GET, url),
                 "post" => Request::new(Method::POST, url),
@@ -112,7 +109,7 @@ pub mod requests {
             }
         }
 
-        async fn exec_request(&self, req: Request) -> Result<reqwest::Response, ()> {
+        async fn execute(&self, req: Request) -> Result<reqwest::Response, ()> {
             let res = reqwest::Client::execute(&*self.client, req)
                 .await
                 .expect("Client should successfully execute request ... ");
@@ -125,10 +122,11 @@ pub mod requests {
             let mut responses = vec![];
             for domain in domains {
                 let url = Url::parse(&domain.url).unwrap();
-                let req = Self::construct_request("get", url);
-                let res = Self::exec_request(&self, req).await?;
+                let req = Self::construct("get", url);
+                let res = Self::execute(&self, req).await?;
                 let status = res.status();
                 let status_text = status.as_str();
+
                 responses.push(Status {
                     name: domain.name,
                     domain: domain.url,
@@ -141,10 +139,8 @@ pub mod requests {
     }
 }
 
-// TODO
-// Implement scraper module
 //////////////////////////////
-pub mod chop {
+pub mod crawl {
     use scraper::{Html, Selector};
     struct Target(String);
 
@@ -177,7 +173,6 @@ pub mod chop {
             for anchor in fragment.select(&elements) {
                 if let Some(attrs) = anchor.first_child().unwrap().value().as_element() {
                     for item in attrs.attrs() {
-                        println!("{:?}", item);
                         let owned_str = item.1.to_string();
                         if owned_str.contains(&filter) {
                             src_strings.push(owned_str)
@@ -197,7 +192,10 @@ pub mod chop {
 
     pub async fn reddit() -> Result<Vec<String>, tauri::InvokeError> {
         let all_src_data: Vec<Vec<String>> = vec![];
-        let target = Target(format!("https://www.reddit.com/search/?q=programming"));
+        let target = Target(format!(
+            "https://www.reddit.com/search/?q=programming&source=recent&include_over_18=1"
+        ));
+
         let client = reqwest::Client::new();
 
         let body = client
@@ -217,7 +215,6 @@ pub mod chop {
             println!("{:?}", el.value());
         }
 
-        println!("{:?}", elements);
         Ok(all_src_data.into_iter().flatten().collect())
     }
 }
@@ -225,7 +222,8 @@ pub mod chop {
 // TODO
 // Implement cron module
 ///////////////////////////
-///
+//
+
 pub mod schedule {
 
     use chrono::Utc;

@@ -3,7 +3,7 @@
 }
 
 .domain-box {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--bg-prime);
 }
 
 .scraped-links-box {
@@ -15,6 +15,7 @@
 .scraped-link {
   margin: 1rem auto;
   width: 100%;
+  color: white;
 }
 
 .input-btn-pair {
@@ -35,8 +36,9 @@
 }
 
 .monitor-options-container {
-  border: 1px solid black;
+  border: 1px solid var(--font-prime);
   padding: 1rem;
+  margin-bottom: 3rem;
 }
 
 .checkbox {
@@ -46,11 +48,17 @@
   cursor: pointer;
   z-index: 3;
 }
+
 .checkbox::after {
   content: "OFF";
   color: rgba(200, 0, 0, 0.9);
 }
+
 .checkbox:checked::after {
   content: "ON";
   color: rgba(0, 200, 0, 0.9);
+}
+
+.run-check-btn {
+  font-size: 1rem;
 }

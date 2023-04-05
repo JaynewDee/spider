@@ -1,6 +1,6 @@
 pub mod invoke_api {
-    use spider::chop::{hacker_news, reddit};
-    use spider::requests::Client;
+    use spider::crawl::{hacker_news, reddit};
+    use spider::monitor::Client;
     use spider::schedule::CustomSchedule;
     use tauri::InvokeError;
 
@@ -40,5 +40,10 @@ pub mod invoke_api {
     pub async fn get_reddit_srcs() -> Result<Vec<String>, InvokeError> {
         let srcs = reddit().await;
         return srcs;
+    }
+
+    #[tauri::command]
+    pub async fn get_dev_srcs() -> Result<Vec<String>, InvokeError> {
+        return Ok(vec!["Hello!".to_string()]);
     }
 }

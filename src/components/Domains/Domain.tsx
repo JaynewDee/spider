@@ -1,5 +1,5 @@
 import React from "react";
-import { OptionsState } from "../Monitor";
+import { OptionsState } from "../Monitor/Monitor";
 
 interface DomainProps {
   data: {
@@ -24,7 +24,6 @@ const Domain: React.FC<DomainProps> = ({ data, options }): JSX.Element => {
 
   const { name, domain, code } = data;
 
-  console.log(options);
   return (
     <div className="domain-box">
       <p>{name}</p>
