@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Invokers } from "../../api/invoke";
 import LinkResult from "./LinkResult";
+import SelectOptions from "./SelectOptions";
 
 const Crawl = () => {
-  const [notification, setNotification] = useState("");
   const [results, setResults] = useState<string[]>([]);
   const [filterState, setFilterState] = useState("");
   const [targetState, setTargetState] = useState("reddit");
@@ -14,6 +14,7 @@ const Crawl = () => {
     const hackers = targetState === "hackers";
     const reddit = targetState === "reddit";
     const dev = targetState === "dev";
+
     const res = hackers
       ? await getHackerSrcs(17, filterState)
       : reddit
@@ -23,13 +24,11 @@ const Crawl = () => {
     setResults(res);
   };
 
-  const toggleIframe = () => {};
+  const handleTargetChange = (e: ChangeEvent<HTMLSelectElement>) =>
+    setTargetState(e.target.value);
 
-  const handleTargetChange = (e: any) => setTargetState(e.target.value);
-
-  const handleFilterChange = (e: any) => setFilterState(e.target.value);
-
-  const crawlOptions = ["Reddit", "Hackers", "Dev"];
+  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) =>
+    setFilterState(e.target.value);
 
   return (
     <div>
@@ -42,15 +41,10 @@ const Crawl = () => {
           onChange={handleFilterChange}
         />
         <select name="targets" id="crawl-select" onChange={handleTargetChange}>
-          {crawlOptions.map((opt) => (
-            <option key={opt} value={opt.toLowerCase()}>
-              {opt}
-            </option>
-          ))}
+          {SelectOptions()}
         </select>
         <button onClick={handleCrawl}>CRAWL</button>
       </div>
-      {notification ? <p>{notification}</p> : <></>}
       {results.length ? (
         <div className="scraped-links-box">
           {results.map((src) => (

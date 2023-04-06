@@ -9,7 +9,7 @@ pub mod invoke_api {
         let client = Client::new();
 
         let res = Client::request_domain_status(&client).await?;
-        println!("{:?}", res);
+
         Ok(res)
     }
 

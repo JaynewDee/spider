@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Invokers } from "../../api/invoke";
 import Domain from "../Domains/Domain";
 
@@ -8,7 +8,11 @@ export interface OptionsState {
 
 interface ResultsState {
   loading: boolean;
-  data: any[];
+  data: {
+    name: string;
+    domain: string;
+    code: string;
+  }[];
 }
 
 const Monitor = () => {
@@ -28,7 +32,7 @@ const Monitor = () => {
     setResults({ data: parsed, loading: false });
   };
 
-  const updateOptionsState = (e: any) => {
+  const updateOptionsState = (e: ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
     setOptionsState((prev) => ({ ...prev, iframes: checked }));
   };

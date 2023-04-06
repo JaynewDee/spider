@@ -186,6 +186,9 @@ pub mod crawl {
             target_page += 1;
         }
 
+        // TODO
+        // Add name of each article link to crawl return
+
         Ok(all_src_data.into_iter().flatten().collect())
     }
 

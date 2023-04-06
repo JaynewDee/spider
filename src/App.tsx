@@ -5,7 +5,7 @@ import Monitor from "./components/Monitor/Monitor";
 import Crawl from "./components/Crawl/Crawl";
 import Nav from "./components/Nav/Nav";
 
-const App: React.FC<any> = () => {
+function App() {
   const [displayState, setDisplayState] = useState("monitor");
 
   const displaySwitch = (displayState: string) => {
@@ -23,6 +23,6 @@ const App: React.FC<any> = () => {
       <div className="main-display">{displaySwitch(displayState)}</div>
     </>
   );
-};
+}
 
 export default App;

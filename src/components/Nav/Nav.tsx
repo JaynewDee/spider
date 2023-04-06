@@ -1,4 +1,13 @@
-const Nav: React.FC<any> = ({ displayState, setDisplayState }) => {
+//
+
+import { Dispatch, SetStateAction } from "react";
+
+interface NavProps {
+  displayState: string;
+  setDisplayState: Dispatch<SetStateAction<string>>;
+}
+
+const Nav: React.FC<NavProps> = ({ displayState, setDisplayState }) => {
   const displayMonitor = () => setDisplayState("monitor");
   const displayCrawl = () => setDisplayState("crawl");
 

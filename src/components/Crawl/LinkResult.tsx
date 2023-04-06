@@ -13,7 +13,9 @@ const LinkResult: React.FC<LinkProps> = ({ src }) => {
 
   return (
     <>
-      <button onClick={toggleIframe}>IFRAME</button>
+      <button onClick={toggleIframe} className="toggle-iframe-btn">
+        IFRAME
+      </button>
       {iframeState ? (
         <iframe src={src}></iframe>
       ) : (
