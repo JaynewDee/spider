@@ -9,7 +9,7 @@
 .scraped-links-box {
   display: flex;
   flex-flow: column nowrap;
-  width: 90vw;
+  width: 100%;
 }
 
 .scraped-link {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Invokers } from "../../api/invoke";
+import LinkResult from "./LinkResult";
 
 const Crawl = () => {
   const [notification, setNotification] = useState("");
@@ -21,6 +22,8 @@ const Crawl = () => {
 
     setResults(res);
   };
+
+  const toggleIframe = () => {};
 
   const handleTargetChange = (e: any) => setTargetState(e.target.value);
 
@@ -51,9 +54,7 @@ const Crawl = () => {
       {results.length ? (
         <div className="scraped-links-box">
           {results.map((src) => (
-            <a className="scraped-link" href={src}>
-              {src}
-            </a>
+            <LinkResult src={src} />
           ))}
         </div>
       ) : (

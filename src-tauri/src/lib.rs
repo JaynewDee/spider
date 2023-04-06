@@ -148,7 +148,6 @@ pub mod crawl {
         num_pages: usize,
         filter: &str,
     ) -> Result<Vec<String>, tauri::InvokeError> {
-        // Query param `p` controls current page, increment and iterate over pages
         let mut target_page = 1;
         let mut all_src_data: Vec<Vec<String>> = vec![];
         let target = Target(format!("https://news.ycombinator.com/?p={target_page}"));
