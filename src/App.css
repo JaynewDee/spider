@@ -1,7 +1,24 @@
 .header-container {
-  margin-left: 1rem;
+  justify-content: center;
+  margin: 3rem auto 1rem;
+  display: flex;
+  align-items: center;
 }
-
+#app-title {
+  margin: 0 1rem;
+}
+.spider {
+  display: flex;
+  font-size: 1.66rem;
+}
+.spider-body {
+  font-size: 1rem;
+}
+.middle-spider {
+  font-size: 2rem;
+  color: rgba(244, 224, 77, 0.9);
+  margin: 0 -1.33rem;
+}
 .domain-box {
   border-bottom: 1px solid var(--bg-prime);
 }
@@ -22,6 +39,7 @@
   display: flex;
   flex-flow: column nowrap;
   width: 33%;
+  margin: 0 auto 3rem;
 }
 
 .nav-container {
@@ -51,12 +69,12 @@
 
 .checkbox::after {
   content: "OFF";
-  color: rgba(200, 0, 0, 0.9);
+  color: rgba(244, 224, 77);
 }
 
 .checkbox:checked::after {
   content: "ON";
-  color: rgba(0, 200, 0, 0.9);
+  color: rgba(44, 165, 141, 0.9);
 }
 
 .run-check-btn {
