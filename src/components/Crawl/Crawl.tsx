@@ -5,6 +5,8 @@ import SelectOptions from "./SelectOptions";
 
 const Crawl = () => {
   const [results, setResults] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [emptyCrawl, setEmptyCrawl] = useState(false);
   const [filterState, setFilterState] = useState("");
   const [targetState, setTargetState] = useState("reddit");
 
@@ -15,13 +17,20 @@ const Crawl = () => {
     const reddit = targetState === "reddit";
     const dev = targetState === "dev";
 
+    setLoading(true);
+
     const res = hackers
       ? await getHackerSrcs(17, filterState)
       : reddit
       ? await getRedditSrcs()
       : await getDevSrcs();
-
+    if (res.length === 0) {
+      setEmptyCrawl(true);
+      return;
+    }
+    setEmptyCrawl(false);
     setResults(res);
+    setLoading(false);
   };
 
   const handleTargetChange = (e: ChangeEvent<HTMLSelectElement>) =>
@@ -30,9 +39,10 @@ const Crawl = () => {
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) =>
     setFilterState(e.target.value);
 
+  const clearResults = () => setResults([]);
   return (
     <div>
-      <div className="input-btn-pair">
+      <div className="input-set">
         <label>Filter:</label>
         <input
           value={filterState}
@@ -44,6 +54,9 @@ const Crawl = () => {
           {SelectOptions()}
         </select>
         <button onClick={handleCrawl}>CRAWL</button>
+        {results.length ? <button onClick={clearResults}>RESET</button> : <></>}
+        {loading && <p>Crawling {targetState} at Spider speed ... </p>}
+        {emptyCrawl && <p>You are approached by a sad, weary spider ... </p>}
       </div>
       {results.length ? (
         <div className="scraped-links-box">
@@ -52,8 +65,9 @@ const Crawl = () => {
           ))}
         </div>
       ) : (
-        <p>Go Crawling ...</p>
+        <></>
       )}
+      {results.length === 0 && !loading ? <>Go Crawling ... </> : <></>}
     </div>
   );
 };

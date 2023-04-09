@@ -33,6 +33,10 @@ pub mod monitor {
                         "http://acumen-dev-client-static.s3-website.us-east-2.amazonaws.com/",
                     ),
                 },
+                Domain {
+                    name: String::from("Roomy"),
+                    url: String::from("https://meep-mountain.herokuapp.com/"),
+                },
             ];
             Domains(default_domains)
         }
@@ -222,7 +226,13 @@ pub mod crawl {
 }
 
 // TODO
-// Implement cron module
+// Implement sql/ite module
+// to store saved crawl results
+
+pub mod persistence {}
+
+// TODO
+// Complete/revive cron module
 ///////////////////////////
 //
 

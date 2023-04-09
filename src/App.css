@@ -35,11 +35,21 @@
   color: white;
 }
 
-.input-btn-pair {
+.input-set {
   display: flex;
   flex-flow: column nowrap;
   width: 33%;
   margin: 0 auto 3rem;
+}
+.input-set * {
+}
+.input-set input,
+.input-set select {
+  all: unset;
+  padding: 0.33rem;
+  background-color: black;
+  border-radius: 6px;
+  border: 1px solid rgba(244, 224, 77, 0.9);
 }
 
 .nav-container {

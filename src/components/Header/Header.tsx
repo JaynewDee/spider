@@ -1,6 +1,6 @@
 import React from "react";
 
-// const body = () => <div className="spider-body">{"()"}</div>;
+const body = () => <div className="spider-body">{"()"}</div>;
 const left = () => <span className="">{"}"}</span>;
 const middle = () => (
   <span className="middle-spider">

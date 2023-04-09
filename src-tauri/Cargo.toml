@@ -17,15 +17,19 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2", features = ["http-all", "shell-open"] }
 reqwest = {version = "0.11.16", features = ["cookies"] }
-scraper = "0.15.0"
+scraper = "0.16.0"
 select = "0.6.0"
 cron = "0.12.0"
 chrono = "0.4.23"
 thiserror = "1.0.38"
+rusqlite = { version = "0.29.0", features = ["bundled"] }
+
+#
+
 [features]
 # by default Tauri runs in production mode
-# when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
 default = ["custom-protocol"]
+
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]

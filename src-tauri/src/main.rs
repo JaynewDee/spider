@@ -7,8 +7,6 @@ extern crate reqwest;
 
 mod ffi;
 
-use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
-
 use ffi::invoke_api::{
     get_dev_srcs, get_domains, get_hacker_srcs, get_reddit_srcs, get_schedule, scrape_all,
 };
